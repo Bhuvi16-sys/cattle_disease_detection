@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cattle Disease Prediction</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+
+<body>
+  <div class="container">
+    <h1>🐄 Cattle Disease Predictor</h1>
+
+    <center>
+      <form method="post" enctype="multipart/form-data" id="predictionForm">
+        <label class="file-label" for="imageInput">
+          <span>📷</span> Upload Wound Image
+        </label>
+        <input type="file" id="imageInput" name="image" accept="image/*" onchange="previewImage(event)" />
+        <img id="preview" class="preview" src="{{ image_url if image_url else '' }}" alt="Image Preview" {% if not
+          image_url %}style="display:none;" {% endif %} />
+
+        <!-- Manual Feature Selection -->
+        <div id="manual-inputs" class="manual-box">
+          <h3>🛠️ Analyze Characteristics</h3>
+          <p><small>If auto-detection is unavailable, please select manually:</small></p>
+          <div class="input-group">
+            <label>Observed Color:</label>
+            <select name="warna">
+              <option value="hitam">Black</option>
+              <option value="kuning">Yellow</option>
+              <option value="merah">Red</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label>Wound Texture:</label>
+            <select name="tekstur">
+              <option value="halus">Smooth (Normal)</option>
+              <option value="kasar">Rough / Ulcerated</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label>Wound Location:</label>
+            <select name="lokasi">
+              <option value="gusi">Gums / Mouth</option>
+              <option value="kuku">Hoof / Foot</option>
+              <option value="lidah">Tongue</option>
+              <option value="badan">Body / Skin</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label>Is there a wound?</label>
+            <select name="luka">
+              <option value="ya">Yes</option>
+              <option value="tidak">No</option>
+            </select>
+          </div>
+        </div>
+
+        <button type="submit">🔍 Run Diagnostic</button>
+      </form>
+    </center>
+
+    {% if error_msg %}
+    <div class="error-box">
+      <p>⚠️ <strong>Offline Mode Enabled:</strong></p>
+      <p><small>{{ error_msg }}</small></p>
+      <p>Using manual feature analysis. Please ensure you've selected characteristics above.</p>
+    </div>
+    {% endif %}
+
+    {% if result %}
+    {% set conf_warna = result.confidence['warna'][result.fitur['warna']] %}
+    {% set conf_tekstur = result.confidence['tekstur'][result.fitur['tekstur']] %}
+    {% set conf_lokasi = result.confidence['lokasi'][result.fitur['lokasi']] %}
+    {% if result.luka == 'ya' %}
+    {% set conf_luka = result.confidence['luka']['luka'] %}
+    {% else %}
+    {% set conf_luka = result.confidence['luka']['tidak'] %}
+    {% endif %}
+
+    {% set features_low = [] %}
+    {% if conf_warna < 60 %} {% set _=features_low.append('Color (' ~ conf_warna ~ '%)' ) %} {% endif %} {% if
+      conf_tekstur < 60 %} {% set _=features_low.append('Texture (' ~ conf_tekstur ~ '%)' ) %} {% endif %} {% if
+      conf_lokasi < 60 %} {% set _=features_low.append('Location (' ~ conf_lokasi ~ '%)' ) %} {% endif %} {% if
+      conf_luka < 60 %} {% set _=features_low.append('Wound (' ~ conf_luka ~ '%)' ) %} {% endif %} {% if
+      features_low|length==0 or result.manual %} <div class="result-container">
+      <div class="box">
+        <h3>🧬 Clinical Features</h3>
+        <p>• <strong>Color:</strong> {{ result.fitur_en['warna'] }} ({{ conf_warna }}%)</p>
+        <p>• <strong>Texture:</strong> {{ result.fitur_en['tekstur'] }} ({{ conf_tekstur }}%)</p>
+        <p>• <strong>Location:</strong> {{ result.fitur_en['lokasi'] }} ({{ conf_lokasi }}%)</p>
+        <p>• <strong>Wound Status:</strong> {{ result.fitur_en['luka'] }} ({{ conf_luka }}%)</p>
+      </div>
+
+      <div class="box">
+        <h3>🩺 Diagnosis</h3>
+        <p class="diagnosis-text"><strong>{{ result.diagnosis.upper() }}</strong></p>
+        {% if result.manual %}
+        <p><small>*(Verified via user input)*</small></p>
+        {% endif %}
+      </div>
+
+      {% if result.info_penyakit %}
+      <div class="box result-box-full">
+        <h3>🔬 Scientific Background</h3>
+        <p>• <strong>Primary Cause:</strong> {{ result.info_penyakit.cause }}</p>
+        <p>• <strong>Pathogen Type:</strong> {{ result.info_penyakit.pathogen }}</p>
+        <p>• <strong>Transmission:</strong> {{ result.info_penyakit.transmission }}</p>
+      </div>
+      {% endif %}
+
+      <div class="box result-box-full">
+        <h3>💡 Veterinary Recommendations</h3>
+        <ul class="recommendation-list">
+          {% for step in result.rekomendasi %}
+          <li>{{ step }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+  </div>
+  {% else %}
+  <div class="box" style="border-left-color: var(--danger);">
+    <h3>❌ Low Confidence Detection</h3>
+    <p>
+      The system is unsure about: {{ features_low | join(', ') }}.<br />
+      Please provide a clearer photo or use the <strong>Manual Selection</strong> mode above.
+    </p>
+  </div>
+  {% endif %}
+  {% endif %}
+  </div>
+
+  <script>
+    function previewImage(event) {
+      const preview = document.getElementById("preview");
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          preview.src = e.target.result;
+          preview.style.display = "block";
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+  </script>
+</body>
+
+</html>
