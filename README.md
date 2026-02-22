@@ -44,31 +44,29 @@ The system works in two main stages:
 ---
 
 ## 🏗️ Project Structure
-
+```
 .
 ├── app/                        # Core Application Package
 │   ├── __init__.py             # Package initialization
 │   ├── config.py               # Configuration: Integrated scientific data & skin disease metadata
-│   ├── ml_service.py           # ML Engine: Optimized SVM inference and Lumpy Skin Disease (LSD) logic
-│   └── routes.py               # Request Handler: Enhanced UI data pipeline for scientific diagnostics
-│
+│   ├── ml_service.py           # ML Engine: Optimized SVM inference and LSD logic
+│   └── routes.py               # Request Handler: Enhanced UI data pipeline
 ├── models/                     # Serialized Machine Learning Assets
 │   ├── SVM_linear.pkl          # Pre-trained Linear Support Vector Classifier
 │   └── scaler.pkl              # Feature normalization parameters (StandardScaler)
-│
 ├── static/                     # Frontend Static Assets
-│   ├── uploads/                # Dynamic directory for transient image processing (Git-ignored)
+│   ├── uploads/                # Dynamic directory for transient images (Git-ignored)
 │   └── style.css               # UI Styling: High-fidelity "Midnight Aesthetic" theme
-│
 ├── templates/                  # UI Templates
-│   └── index.html              # Dashboard: Localized English interface with clinical data cards
-│
+│   └── index.html              # Dashboard: Localized English interface
 ├── .env.example                # Configuration template for environment variables
-├── .gitignore                  # Version control exclusions (added venv/ for repository cleanliness)
-├── requirements.txt            # Dependency manifest (added Gunicorn for production hosting)
-├── wsgi.py                     # Production Entry Point: Optimized for cloud deployment (e.g., Render/Heroku)
+├── .gitignore                  # Version control exclusions
+├── requirements.txt            # Dependency manifest (Gunicorn included)
+├── wsgi.py                     # Production Entry Point for cloud deployment
 └── README.md                   # Technical documentation and project overview
+```
 ---
+
 
 ## 🏗️ INTERFACE
 <img width="2857" height="1351" alt="image" src="https://github.com/user-attachments/assets/b5ce05f4-f25b-49f4-a21c-cacc092d0b34" />
