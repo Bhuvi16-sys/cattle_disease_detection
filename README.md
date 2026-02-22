@@ -45,32 +45,29 @@ The system works in two main stages:
 
 ## 🏗️ Project Structure
 
-```text
 .
-├── app/
-│   ├── __init__.py
-│   ├── config.py          # Configuration & constants
-│   ├── ml_service.py      # ML logic & prediction pipeline
-│   └── routes.py          # Flask routes
+├── app/                        # Core Application Package
+│   ├── __init__.py             # Package initialization
+│   ├── config.py               # Configuration: Integrated scientific data & skin disease metadata
+│   ├── ml_service.py           # ML Engine: Optimized SVM inference and Lumpy Skin Disease (LSD) logic
+│   └── routes.py               # Request Handler: Enhanced UI data pipeline for scientific diagnostics
 │
-├── models/
-│   ├── SVM_linear.pkl
-│   └── scaler.pkl
+├── models/                     # Serialized Machine Learning Assets
+│   ├── SVM_linear.pkl          # Pre-trained Linear Support Vector Classifier
+│   └── scaler.pkl              # Feature normalization parameters (StandardScaler)
 │
-├── notebook/
-│   └── Diagnosis_Penyakit_Sapi.ipynb
+├── static/                     # Frontend Static Assets
+│   ├── uploads/                # Dynamic directory for transient image processing (Git-ignored)
+│   └── style.css               # UI Styling: High-fidelity "Midnight Aesthetic" theme
 │
-├── static/
-│   ├── uploads/           # Runtime image uploads (ignored in git)
-│   └── style.css
+├── templates/                  # UI Templates
+│   └── index.html              # Dashboard: Localized English interface with clinical data cards
 │
-├── templates/
-│   └── index.html
-│
-├── .gitignore
-├── app.py                 # Flask entry point
-└── README.md
-```
+├── .env.example                # Configuration template for environment variables
+├── .gitignore                  # Version control exclusions (added venv/ for repository cleanliness)
+├── requirements.txt            # Dependency manifest (added Gunicorn for production hosting)
+├── wsgi.py                     # Production Entry Point: Optimized for cloud deployment (e.g., Render/Heroku)
+└── README.md                   # Technical documentation and project overview
 ---
 
 ## 🏗️ INTERFACE
