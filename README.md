@@ -74,7 +74,9 @@ The system works in two main stages:
 ---
 
 ## 🏗️ INTERFACE
+<img width="2857" height="1351" alt="image" src="https://github.com/user-attachments/assets/b5ce05f4-f25b-49f4-a21c-cacc092d0b34" />
+<img width="2879" height="1527" alt="image" src="https://github.com/user-attachments/assets/aa0ce589-0d3e-479f-b28e-75ecddec3004" />
+<img width="2847" height="1351" alt="image" src="https://github.com/user-attachments/assets/39a7ca67-e43b-48a4-a5ea-9687db154805" />
 
-<img src="UI/hu.png" alt="Main Interface" width="800"/>
 
-<img src="UI/cek.png" alt="Prediction Result" width="800"/>
+
